@@ -52,6 +52,8 @@
       <div>
         <h1>Contabilidad Simple — v3.1 (Perfiles + Doble Respaldo)</h1>
         <div class="small muted">Edición inline · Respaldo por perfil (IndexedDB) · Excel local por perfil (.xlsx)</div>
+        <!-- Botón para exportar Excel -->
+        <button onclick="exportarExcel()">Exportar a Excel</button>
       </div>
 
       <div class="controls">
@@ -1017,6 +1019,6 @@
 })();
 </script>
 </script>
-
+<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </body>
 </html>
