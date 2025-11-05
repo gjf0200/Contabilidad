@@ -6,7 +6,29 @@
 <title>Contabilidad Simple v3.1 - Perfiles & Doble Respaldo</title>
 
 <!-- SheetJS (XLSX) -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script 
+src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js">
+// Importa Firebase
+  // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDkhLaeXYNofiYcg9WCrSDVD5SKUSKqZf0",
+  authDomain: "contabilidadapp.firebaseapp.com",
+  projectId: "contabilidadapp",
+  storageBucket: "contabilidadapp.firebasestorage.app",
+  messagingSenderId: "739859750647",
+  appId: "1:739859750647:web:aaccd18bf12f67fef2fdf2"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+</script>
+
+
 
 
 <style>
@@ -222,6 +244,39 @@
       alert("Usuario o contraseña incorrectos. Intenta nuevamente.");
     }
   }
+
+  async function guardarDatos(nombre, monto, fecha) {
+  try {
+    const docRef = await addDoc(collection(db, "registros"), {
+      tipo: tipo,
+      descripcion: descripcion,
+      fecha: fecha,
+      categoria: categoria,
+      monto: monto
+    });
+    console.log("Documento guardado con ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error al guardar datos: ", e);
+  }
+}
+
+async function obtenerDatos() {
+  const querySnapshot = await getDocs(collection(db, "registros"));
+  const datos = [];
+  querySnapshot.forEach((doc) => {
+    datos.push({ id: doc.id, ...doc.data() });
+  });
+  return datos;
+}
+
+async function exportarExcel() {
+  const datos = await obtenerDatos(); // Trae los datos de Firestore
+  const ws = XLSX.utils.json_to_sheet(datos);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Registros");
+  XLSX.writeFile(wb, "registros.xlsx");
+}
+
 
   // --- Aquí comienza tu código existente ---
 
